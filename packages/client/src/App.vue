@@ -1,31 +1,94 @@
 <script setup lang="ts">
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-import HelloWorld from './components/HelloWorld.vue';
+import { reactive } from 'vue';
+import Message from './components/Message.vue';
+import { useQuery, useMutation, useQueryClient } from 'vue-query';
+import { trpc } from './api/trpc';
+
+const queryClient = useQueryClient();
+
+const getMessages = () => trpc.query('getMessages');
+const {
+  isError: getMessagesHasError,
+  isLoading,
+  data,
+  refetch,
+} = useQuery('getMessages', getMessages, {
+  refetchOnWindowFocus: false,
+});
+
+const addMessage = (form: { user: string; message: string }) =>
+  trpc.mutation('addMessage', form);
+const {
+  error: addMessageHasError,
+  mutate,
+  reset,
+} = useMutation('addMessage', addMessage);
+
+const handleSubmit = () => {
+  mutate(form, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('getMessages');
+    },
+  });
+};
+
+const form = reactive({
+  user: '',
+  message: '',
+});
 </script>
 
 <template>
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
+  <div class="trpc-example">
+    <h1 v-if="getMessagesHasError" class="trpc-example__error">
+      Something went wrong - cannot fetch data
+      <button @click="refetch()">Refetch data</button>
+    </h1>
+    <h1 v-if="addMessageHasError" class="trpc-example__error">
+      Something went wrong - cannot submit message
+      <button @click="reset">Reset error</button>
+    </h1>
+    <div
+      v-if="!getMessagesHasError && !addMessageHasError"
+      class="trpc-example__container"
+    >
+      <form @submit.prevent="handleSubmit" class="trpc-example__form">
+        <div class="trpc-example__form-user">
+          <label for="user">User:</label>
+          <input type="text" id="user" v-model="form.user" required />
+        </div>
+        <div class="trpc-example__form-message">
+          <label for="message">Message:</label>
+          <input type="text" id="message" v-model="form.message" required />
+        </div>
+        <button type="submit">Add message</button>
+      </form>
+      <h2 v-if="isLoading">Data is being loaded</h2>
+      <Message
+        v-for="chatMessage in data"
+        :key="chatMessage.id"
+        :chat-message="chatMessage"
+      />
+    </div>
   </div>
-  <HelloWorld msg="Vite + Vue" />
 </template>
 
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
+<style scoped lang="scss">
+@import './style.css';
+
+.trpc-example {
+  max-width: 500px;
+
+  &__error {
+    color: red;
+  }
+
+  &__container {
+    text-align: left;
+  }
+
+  &__form {
+    display: flex;
+  }
 }
 </style>

@@ -9,10 +9,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "vue": "^3.2.37"
+    "@trpc/client": "^9.26.1",
+    "api-server": "1.0.0",
+    "vue": "^3.2.37",
+    "vue-query": "^1.25.2",
+    "zod": "^3.17.3"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^3.0.0",
+    "sass": "^1.53.0",
     "typescript": "^4.6.4",
     "vite": "^3.0.0",
     "vue-tsc": "^0.38.4"

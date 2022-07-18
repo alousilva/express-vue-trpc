@@ -5,10 +5,13 @@
   "scripts": {
     "start": "ts-node-dev index.ts"
   },
+  "main": "index.ts",
   "dependencies": {
     "@trpc/server": "^9.26.1",
+    "@types/uuid": "^8.3.4",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "uuid": "^8.3.2",
     "zod": "^3.17.3"
   },
   "devDependencies": {

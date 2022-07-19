@@ -10,15 +10,15 @@ export interface ChatMessage {
 
 const messages: ChatMessage[] = [
   { id: uuidv4(), user: 'User1', message: 'This is my the first message!' },
-  { id: uuidv4(), user: 'User2', message: 'Alright alright alright' },
+  { id: uuidv4(), user: 'User2', message: 'Hello there 🎉' },
 ];
 
 export const appRouter = trpc
   .router()
-  .query('greeting', {
+  .query('greetings', {
     resolve() {
       return {
-        message: 'Greetings from /trpc/hello :)',
+        message: 'Greetings from /trpc/greetings :)',
       };
     },
   })

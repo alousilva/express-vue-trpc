@@ -33,7 +33,7 @@ As a starting point I watched [Jack Herrington](https://twitter.com/jherr)'s gre
 The next section shows how the final folder structure looks like, based on Jack's steps and after modifying it to use Vue.
 
 ### Project folder structure
-![folder structure](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/w7ig8il0vr24e8qkxntj.png)
+<img width="324" alt="folder structure" src="https://user-images.githubusercontent.com/21337561/180062779-8f02ecb0-d3d4-4890-b030-ee35206510ad.png">
 
 It's a monorepo that uses yarn workspaces.
 The server project is in the **api-server** folder and the frontend project is in the **client** folder.
@@ -80,14 +80,15 @@ The following code shows the router, which contains the access points:
 - 1 mutation endpoint (similar to a rest POST endpoint):
   - **addMessage**
 
+_**Note**: aside from adding data, a mutation can also update or delete data._
+
 You can also see that I'm using [zod](https://github.com/colinhacks/zod), which is a "TypeScript-first schema declaration and validation library".
 
 This package is going to be used to validate my inputs for queries/mutations (If needed, those validations can even throw validation messages).
-
-_**Note**: And you can also use zod to infer types from zod objects, storing them as types and reusing them anywhere_:
 ```js
 z.string().uuid({ message: "Invalid UUID" });
 ```
+_**Note**: And you can also use zod to infer types from zod objects, storing them as types and reusing them anywhere_:
 
 ```js
 // packages\api-server\router\app.ts
@@ -169,7 +170,8 @@ True, however, this package offers neat features out of the box, such as caching
 - Memoizing query results with structural sharing
 
 And the hooks offer a set of standard props/functions for you to use in your app. Example of the useQuery hook:
-![Example of useQuery](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/ty7mduntr3iq2r1asayb.png)
+<img width="463" alt="props from hooks" src="https://user-images.githubusercontent.com/21337561/180063035-60b52224-994f-4cf6-9d56-6090cd33d198.png">
+
 _**Note**: The data that you need to access is in the, conviniently named, **data** prop._
 
 ### tRPC client
@@ -259,26 +261,31 @@ const showFormAndMessages = computed(() => {
 ## App and examples
 The best way to interact with this project is, obviously, by running it locally and see what you can do with it. But here are some examples:
 
-This is how the client looks like (yes, I know, the UI looks fabulous!):
-![client running on localhost:3000](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/4ar50q36c17ly43njreo.png)
+This is how the client looks like (yes, I know, the UI looks fabulous!). The Vue.js devtools also displays information about the queries:
+
+<img width="673" alt="App UI and devtools" src="https://user-images.githubusercontent.com/21337561/180070253-700b401e-b2e5-446c-a9e4-9d8f53aa8552.png">
 
 Data coming from /trpc/greetings:
-![greetings example data](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/5250s4hjtqo9efz3xm72.png)
+
+<img width="336" alt="trpc_greetings" src="https://user-images.githubusercontent.com/21337561/180063371-c34555d0-6365-4c2c-bf82-5c92095e4c16.png">
  
 Data coming from /trpc/getMessages:
-![getMessages example data](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/qf8oqnbr5nhgci1uap64.png)
+
+<img width="363" alt="trpc_getMessages" src="https://user-images.githubusercontent.com/21337561/180063399-84a133a6-dbb5-427b-b3b8-bd8b319a825f.png">
 
 Examples of changing server side functions and observing TS safety checks on the client:
-![Ts safety 1](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/r223lhfxuhy93kmvti5p.gif)![Ts safety 2](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/vgguekeect4b1ybdkqoa.gif)
+![ts safety 1](https://user-images.githubusercontent.com/21337561/180063525-6d699d73-68f7-43b4-89c4-b447a456922a.gif)
+![ts safety 2](https://user-images.githubusercontent.com/21337561/180063553-8fc41339-2ecb-426d-b1e8-9a2222adc616.gif)
+
 
 You can also rename your server functions from the client (for some reason I was not able to rename the symbol from the server):
-![Ts safety](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/fpjbweq9ttkgd6m5i6ug.gif) 
+![Rename trpc function](https://user-images.githubusercontent.com/21337561/180063603-74f3e3b8-b32c-4b85-8af0-3392577782af.gif)
 
-Example of blocking a query request and see the refetch and retries in action:
-![Refetch](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/ba09zz8mp2nm9d9gap9h.gif)
+Example of blocking a query request and then calling the refetch function and its retries:
+![Refetch example](https://user-images.githubusercontent.com/21337561/180063631-a5bab373-7bee-4dbb-a5ba-a726b0683d3f.gif)
 
-Example of blocking a mutation request and see the reset in action. This resets the error state:
-![Reset error](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/t7kr3r1m8bda86mpbz6e.gif)
+Example of blocking a mutation request and then calling the reset function. This resets the error state:
+![Reset error](https://user-images.githubusercontent.com/21337561/180063653-db5dfd81-935f-4aee-bbc5-e9c6b6e476a5.gif)
 
 ## More useful links
 - My repo: https://github.com/alousilva/express-vue-trpc
@@ -287,5 +294,3 @@ Example of blocking a mutation request and see the reset in action. This resets 
 - Learn with Jason, interview with Alex: https://www.youtube.com/watch?v=GryES84SSEU
 
 I might create another repo to explore a more realistic project using Nuxt, tRPC, Vue Query, where I connect to a database and use the ORM Prisma, similarly to what Alex did in this pretty neat starter repo: https://github.com/trpc/examples-next-prisma-starter
-
-Hope you found this article useful and that it allowed you to discover something today :)
